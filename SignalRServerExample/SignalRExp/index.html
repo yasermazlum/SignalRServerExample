@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Example</title>
+    <script src="signalr.min.js"></script>
+    <script src="jquery.min.js"></script>
+
+    <script>
+        $(document).ready(() => {
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("https://localhost:7232/myhub")
+                .withAutomaticReconnect([1000, 1000, 2000, 2000, 4000, 4000, 10000, 10000]) // 0 2 10 30
+                .build();
+
+            async function start() {
+                try {
+                    await connection.start();
+                } catch (error) {
+                    setTimeout(() => start(), 2000);
+                }
+            }
+
+            start();
+
+            function animation(){
+                status.fadeIn(2000, ()=>{
+                    setTimeout(() => {
+                        status.fadeOut()
+                    }, 2000);
+                })
+            }
+
+            const status = $("#status");
+            connection.onreconnecting(error => {
+                status.css("background-color", "blue")
+                status.css("color", "white")
+                status.html("Bağlantı kuruluyor...")
+                animation()
+                //$("#status").append( + error +"" );
+            });
+
+            connection.onreconnected(connectionId => {
+                status.css("background-color", "green")
+                status.css("color", "white")
+                status.html("Bağlantı kuruldu...")
+                animation()
+            });
+
+            connection.onclose(connectionId => {
+                status.css("background-color", "red")
+                status.css("color", "white")
+                status.html("Bağlantı koptu...")
+                animation()
+            });
+
+            connection.on("userConnected", (cId)=>{
+                status.html(`${cId} bağlandı.`)
+                status.css("background-color", "green")
+                status.css("color", "white")
+                animation()
+            });
+
+            connection.on("userDisconnected", (cId)=>{
+                status.html(`${cId} ayrıldı.`)
+                status.css("background-color", "red")
+                status.css("color", "white")
+                animation()
+            });
+
+            connection.on("clients", clientsData => {
+                $.each(clientsData, (index, item) => {
+                    $("#clients").append(`<li>${item}</li>`)
+                });
+            })
+
+            //aa$("span").append("connected");
+
+            $('#btnGonder').click(() => {
+                let message = $('#txtMessage').val();
+                connection.invoke("SendMessageAsync", message).catch(error => console.log(`${message} - gönderilirken hata olustu`))
+            });
+
+            connection.on("receiveMessage", message => {
+                $("#messages").append(message + "<br>");
+            });
+
+
+        });
+    </script>
+</head>
+
+<body>
+
+    <div id="status" style="display: none;"></div>
+
+    <input type="text" id="txtMessage" />
+    <button id="btnGonder">Gönder</button>
+    <div id="messages"></div>
+
+    <div>
+        <ul id="clients"></ul>
+    </div>
+    
+    <footer>
+        <span></span>
+    </footer>
+</body>
+
+</html>
