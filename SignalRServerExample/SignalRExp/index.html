@@ -12,7 +12,7 @@
     <script>
         $(document).ready(() => {
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl("https://localhost:44371/myhub")
+                .withUrl("https://localhost:44371/messagehub")
                 .withAutomaticReconnect([1000, 1000, 2000, 2000, 4000, 4000, 10000, 10000]) // 0 2 10 30
                 .build();
 
@@ -57,26 +57,6 @@
                 animation()
             });
 
-            connection.on("userConnected", (cId)=>{
-                status.html(`${cId} bağlandı.`)
-                status.css("background-color", "green")
-                status.css("color", "white")
-                animation()
-            });
-
-            connection.on("userDisconnected", (cId)=>{
-                status.html(`${cId} ayrıldı.`)
-                status.css("background-color", "red")
-                status.css("color", "white")
-                animation()
-            });
-
-            connection.on("clients", clientsData => {
-                $.each(clientsData, (index, item) => {
-                    $("#clients").append(`<li>${item}</li>`)
-                });
-            })
-
             //aa$("span").append("connected");
 
             $('#btnGonder').click(() => {
@@ -88,13 +68,16 @@
                 $("#messages").append(message + "<br>");
             });
 
+            connetion.on("getConnectionId", connectionId => {
+                $("#connectionId").html(`Connection Id: ${connectionId}`)
+            })
 
         });
     </script>
 </head>
 
 <body>
-
+    <div style="background-color: black; color:white" id="connectionId"></div>
     <div id="status" style="display: none;"></div>
 
     <input type="text" id="txtMessage" />

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MbL7MoofaEJvEgIaW45XAnJixZZojLLjyTZ+niQt90HbXB2EU0RdI5F8ZSU3pV81hQ9q5MIdXoeEd7jjUCCw5A==",
+  "dgSpecHash": "Pw+4LPJzUtcMWl+IWTAeQ11MO6D5vnJNkx8gyjOp2z32fGsLl2inXJY1LvPSOfdMksvWt5Xh2Y12t2ByKsv2XA==",
   "success": true,
-  "projectFilePath": "D:\\VisualStudio\\SignalRServerExample\\SignalRServerExample\\SignalRServerExample.csproj",
+  "projectFilePath": "D:\\Projects\\DotNet\\SignalRServerExample\\SignalRServerExample\\SignalRServerExample.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

@@ -10,9 +10,9 @@ namespace SignalRServerExample.Controllers
     {
         readonly MyBusiness _myBusiness;
 
-        public HomeController(MyBusiness myBusiness)
+        public HomeController(MyBusiness x)
         {
-            _myBusiness = myBusiness;
+            _myBusiness = x;
         }
 
         [HttpGet("{message}")]
