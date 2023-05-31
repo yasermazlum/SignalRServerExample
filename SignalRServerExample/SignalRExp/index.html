@@ -26,8 +26,8 @@
 
             start();
 
-            function animation(){
-                status.fadeIn(2000, ()=>{
+            function animation() {
+                status.fadeIn(2000, () => {
                     setTimeout(() => {
                         status.fadeOut()
                     }, 2000);
@@ -61,16 +61,29 @@
 
             $('#btnGonder').click(() => {
                 let message = $('#txtMessage').val();
-                connection.invoke("SendMessageAsync", message).catch(error => console.log(`${message} - gönderilirken hata olustu`))
+                let connectionIds = $("#connectionIds").val().split(",");
+                let groups = $("#txtGroups").val().split(",");
+                //connection.invoke("SendMessageAsync", message, connectionIds).catch(error => console.log(`${message} - gönderilirken hata olustu`))
+                //connection.invoke("SendMessageAsync", message, $("input[name=group]:checked").val()).catch(error => console.log(`${message} - gönderilirken hata olustu`))
+                //connection.invoke("SendMessageAsync", message, $("input[name=group]:checked").val(), connectionIds).catch(error => console.log(`${message} - gönderilirken hata olustu`))
+                //connection.invoke("SendMessageAsync", message, groups).catch(error => console.log(`${message} - gönderilirken hata olustu`))
+                connection.invoke("SendMessageAsync", message, groups[0]).catch(error => console.log(`${message} - gönderilirken hata olustu`))
             });
 
             connection.on("receiveMessage", message => {
                 $("#messages").append(message + "<br>");
             });
 
-            connetion.on("getConnectionId", connectionId => {
-                $("#connectionId").html(`Connection Id: ${connectionId}`)
-            })
+            let _connectionId = "";
+            connection.on("getConnectionId", connectionId => {
+                _connectionId = connectionId;
+                $("#connectionId").html(`Connection Id: ${connectionId}`);
+            });
+
+            $("#joinGroup").click(() => {
+                let groupName = $("input[name=group]:checked").val();
+                connection.invoke("addGroup", _connectionId, groupName).catch(error => console.log(`${message} - grupta hata olustu`))
+            });
 
         });
     </script>
@@ -78,16 +91,28 @@
 
 <body>
     <div style="background-color: black; color:white" id="connectionId"></div>
+    <input type="radio" name="group" value="A" /> A
+    <input type="radio" name="group" value="B" /> B
+    <input type="radio" name="group" value="C" /> C
+    <button id="joinGroup">Gruba gir</button>
+
+    <br />
+
     <div id="status" style="display: none;"></div>
 
-    <input type="text" id="txtMessage" />
+    <input type="text" id="txtMessage" placeholder="Mesaj" />
+    <input type="text" id="txtGroups" placeholder="Gruplar" />
+
+    <br />
+    
+    <textarea placeholder="Idler" id="connectionIds" cols="30" rows="10"></textarea>
     <button id="btnGonder">Gönder</button>
     <div id="messages"></div>
 
     <div>
         <ul id="clients"></ul>
     </div>
-    
+
     <footer>
         <span></span>
     </footer>

@@ -24,17 +24,14 @@ namespace SignalRServerExample
             var app = builder.Build();
 
             app.UseHttpsRedirection();
-
-            app.UseRouting();
-
             app.UseCors();
-
+            app.UseRouting();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<MyHub>("/myhub");
                 endpoints.MapHub<MessageHub>("/messagehub");
+                endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapControllers();
             });
 

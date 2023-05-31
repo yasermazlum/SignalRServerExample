@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="SignalRExp\chat-page.html" />
+  </ItemGroup>
+
 </Project>
