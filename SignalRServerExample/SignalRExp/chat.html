@@ -8,7 +8,7 @@
     <title>Document</title>
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> -->
     <script src="signalr.min.js"></script>
     <script src="jquery.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet" />
@@ -48,14 +48,12 @@
             connection.on("clients", clients => {
                 //$("#_chat_list").html("");
                 $.each(clients, (index, item) => {
-                    const user = $(".chat_list").first().clone();
-                    user.removeClass("active")
-                    $("#userNickName").html(item.nickName)
+                    const user = $(".userMessage").first().clone();
+                    //user.removeClass("active")
+                    user.html(item.nickName)
                     $(".clients").append(user)
-                })
+                });
             });
-
-
         });
     </script>
 </head>
@@ -79,18 +77,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="inbox_chat clients" id="_clients">
-                        <div class="chat_list" id="_chat_list">
+                    <div class="inbox_chat clients" id="">
+                        <div class="chat_list userMessage">
                             <div class="chat_people">
                                 <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
                                 <div class="chat_ib">
-                                    <h5 id="userNickName">Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                                    <p>Test, which is a new approach to have all solutions
-                                        astrology under one roof.</p>
+                                    <div id="userNickName">NickName</div>
+                                    <p>Message</p>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
                 <div class="mesgs">
